@@ -2,11 +2,12 @@
 <html lang="it">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Math Arkanoid</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{background:#000;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;overflow:hidden}
-canvas{display:block;cursor:none}
+body{background:#000;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;overflow:hidden;touch-action:none;user-select:none}
+canvas{display:block;cursor:none;width:100%;max-width:600px;height:auto;touch-action:none}
 </style>
 </head>
 <body>
@@ -658,6 +659,25 @@ canvas.addEventListener('click',()=>{
   else if(gs==='levelwin')         nextLevel();
   else if(gs==='victory')          startGame();
 });
+
+// ── Touch controls ────────────────────────────────────────────────────────
+function touchX(e){
+  const r=canvas.getBoundingClientRect();
+  return (e.touches[0].clientX-r.left)*(W/r.width);
+}
+
+canvas.addEventListener('touchstart',e=>{
+  e.preventDefault();
+  mouseX=touchX(e);
+  if(gs==='menu'||gs==='gameover') startGame();
+  else if(gs==='levelwin')         nextLevel();
+  else if(gs==='victory')          startGame();
+},{passive:false});
+
+canvas.addEventListener('touchmove',e=>{
+  e.preventDefault();
+  mouseX=touchX(e);
+},{passive:false});
 
 // ── Loop ──────────────────────────────────────────────────────────────────
 let last=0;
