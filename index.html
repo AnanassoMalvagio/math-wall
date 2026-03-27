@@ -66,9 +66,9 @@ const sfx={
 
 // ── Difficulty ────────────────────────────────────────────────────────────
 const DIFF={
-  facile:   {speedMult:0.72, timerSec:35, rows:4, label:'FACILE',    color:'#00ff80'},
-  medio:    {speedMult:1.0,  timerSec:25, rows:5, label:'MEDIO',     color:'#ffff00'},
-  difficile:{speedMult:1.38, timerSec:15, rows:6, label:'DIFFICILE', color:'#ff4444'},
+  facile:   {speedMult:0.72, timerSec:300, rows:4, label:'FACILE',    color:'#00ff80'},
+  medio:    {speedMult:1.0,  timerSec:300, rows:5, label:'MEDIO',     color:'#ffff00'},
+  difficile:{speedMult:1.38, timerSec:300, rows:6, label:'DIFFICILE', color:'#ff4444'},
 };
 const BASE_SPEEDS=[3.5,4.5,5.5,7.0];
 
@@ -334,7 +334,7 @@ function update(){
     if(lives<=0){triggerEnd('gameover');return;}
     genProblem();
   }
-  if(probTimer>0&&probTimer%60===0&&probTimer<=5*60)sfx.timerlow();
+  if(probTimer>0&&probTimer%60===0&&probTimer<=30*60)sfx.timerlow();
 
   // Ball movement
   const sf=fx.slowBall>0?0.5:1.0;
@@ -418,8 +418,10 @@ function drawHUD(){
 
   // Timer seconds
   const secsLeft=Math.ceil(probTimer/60);
+  const mm=String(Math.floor(secsLeft/60)).padStart(2,'0');
+  const ss=String(secsLeft%60).padStart(2,'0');
   ctx.font='10px "Courier New"';ctx.textAlign='right';ctx.textBaseline='top';
-  ctx.fillStyle=tColor;ctx.fillText(`${secsLeft}s`,W-6,39);
+  ctx.fillStyle=tColor;ctx.fillText(`${mm}:${ss}`,W-6,39);
 
   // Effect badges
   const effs=[];
