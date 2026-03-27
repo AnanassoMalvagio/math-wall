@@ -226,9 +226,9 @@ function checkBricks(){
     const b=bricks[i];
     if(!b.active) continue;
     if(collideBrick(b)){
+      b.active=false;
       if(i===targetIdx){
-        // Correct!
-        b.active=false;
+        // Risposta corretta: punti bonus + effetto speciale
         score+=100*level;
         spawnParticles(b.x+b.w/2, b.y+b.h/2, b.color, 20);
         spawnRing(b.x+b.w/2, b.y+b.h/2, '#ffffff');
@@ -241,8 +241,15 @@ function checkBricks(){
           genProblem();
         }
       } else {
-        flashBricks[i]={timer:18};
+        // Risposta sbagliata: sparisce senza punti
+        spawnParticles(b.x+b.w/2, b.y+b.h/2, b.color, 8);
         sfx.wrong();
+        const remaining=bricks.filter(x=>x.active).length;
+        if(remaining===0){
+          // Tutti i mattoncini distrutti senza trovare la risposta: rigenera i mattoncini
+          initBricks();
+          assignBrickValues();
+        }
       }
       break;
     }
